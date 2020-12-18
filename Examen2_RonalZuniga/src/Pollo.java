@@ -15,7 +15,7 @@ public class Pollo {
     }
 
     public void setPieza(String pieza) {
-        if (pieza.equals("Pechuga") || pieza.equals("Muzlo") || pieza.equals("Pierna") || pieza.equals("Ala")) {
+        if (pieza.equals("Pechuga") || pieza.equals("Muslo") || pieza.equals("Pierna") || pieza.equals("Ala")) {
             this.pieza = pieza;
         }
     }
