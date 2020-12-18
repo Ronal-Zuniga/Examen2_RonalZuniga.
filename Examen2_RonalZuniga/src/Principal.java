@@ -1,5 +1,7 @@
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
@@ -19,7 +21,7 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() {
         initComponents();
-        ho = new hiloOrden(barra,od,tabla);
+        ho = new hiloOrden(barra, od, tabla);
     }
 
     /**
@@ -42,6 +44,11 @@ public class Principal extends javax.swing.JFrame {
         idc = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         historial = new javax.swing.JDialog();
+        fact = new javax.swing.JDialog();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tafac = new javax.swing.JTextArea();
         jPanel3 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         cbc = new javax.swing.JComboBox<>();
@@ -183,6 +190,51 @@ public class Principal extends javax.swing.JFrame {
             .addGap(0, 300, Short.MAX_VALUE)
         );
 
+        jPanel2.setBackground(new java.awt.Color(255, 153, 102));
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("Factura");
+
+        tafac.setColumns(20);
+        tafac.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tafac.setRows(5);
+        jScrollPane2.setViewportView(tafac);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel9)
+                .addGap(241, 241, 241))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(78, 78, 78)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(68, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(52, 52, 52)
+                .addComponent(jLabel9)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(49, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout factLayout = new javax.swing.GroupLayout(fact.getContentPane());
+        fact.getContentPane().setLayout(factLayout);
+        factLayout.setHorizontalGroup(
+            factLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        factLayout.setVerticalGroup(
+            factLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel3.setBackground(new java.awt.Color(255, 102, 51));
@@ -305,6 +357,11 @@ public class Principal extends javax.swing.JFrame {
 
         jButton5.setFont(new java.awt.Font("Tahoma", 1, 22)); // NOI18N
         jButton5.setText("Ver Factura");
+        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton5MouseClicked(evt);
+            }
+        });
 
         tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -623,7 +680,7 @@ public class Principal extends javax.swing.JFrame {
                 }
                 if ((Integer) sppapas.getValue() != 0) {
                     for (int i = 0; i < (Integer) sppapas.getValue(); i++) {
-                         c.add(new Complemento("Papas"));
+                        c.add(new Complemento("Papas"));
                     }
                 }
                 if ((Integer) spref.getValue() != 0) {
@@ -638,7 +695,7 @@ public class Principal extends javax.swing.JFrame {
                 }
                 Cliente cl = (Cliente) cbc.getSelectedItem();
                 adminCliente ac = new adminCliente("./Clientes.rjz");
-                Orden o = new Orden();
+                Orden o = new Orden(no);
                 o.setPiezas(p);
                 o.setComplementos(c);
                 od = o;
@@ -659,7 +716,8 @@ public class Principal extends javax.swing.JFrame {
                 sppapas.setValue(0);
                 spref.setValue(0);
                 sppie.setValue(0);
-            }else{
+                no++;
+            } else {
                 JOptionPane.showMessageDialog(this, "Orden NO guardada");
             }
         } catch (Exception e) {
@@ -669,14 +727,22 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
         try { //por si ya esta iniciado
-            if ( !ho.isAlive() ) {
+            if (!ho.isAlive()) {
                 setTabla();
                 ho.start();
-            }            
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        }     
+        }
     }//GEN-LAST:event_jButton4MouseClicked
+
+    private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
+        tafac.setText(factura(od,nc1.getText(),apc1.getText()));
+        fact.setModal(true);
+        fact.pack();
+        fact.setLocationRelativeTo(this);
+        fact.setVisible(true);
+    }//GEN-LAST:event_jButton5MouseClicked
 
     /**
      * @param args the command line arguments
@@ -719,6 +785,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTextField apc1;
     private javax.swing.JProgressBar barra;
     private javax.swing.JComboBox<String> cbc;
+    private javax.swing.JDialog fact;
     private javax.swing.JDialog historial;
     private javax.swing.JTextField idc;
     private javax.swing.JTextField idc1;
@@ -735,13 +802,16 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lba;
     private javax.swing.JLabel lbb;
     private javax.swing.JLabel lbm;
@@ -763,10 +833,12 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JSpinner sppure;
     private javax.swing.JSpinner spref;
     private javax.swing.JTable tabla;
+    private javax.swing.JTextArea tafac;
     // End of variables declaration//GEN-END:variables
     hiloOrden ho;
     Orden od;
-    
+    int no = 1;
+
     public void setTabla() {
         tabla.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{},
@@ -789,5 +861,24 @@ public class Principal extends javax.swing.JFrame {
                 return canEdit[columnIndex];
             }
         });
+    }
+
+    public String factura(Orden o, String nombre, String apellido) {
+        SimpleDateFormat sd = new SimpleDateFormat("yyyy/MM/dd hh/mm/ss:");
+        String od = "";
+        for (int i = 0; i < o.getPiezas().size(); i++) {
+            od += o.getPiezas().get(i).getPieza() + "\n";
+        }
+        for (int i = 0; i < o.getComplementos().size(); i++) {
+            od += o.getComplementos().get(i).getTipo() + "\n";
+        }
+        String Factura = "* * P O P E Y E S * *+\n"
+                + "Orden " + o.getNum_orden() + "\n"
+                + "Fecha " + sd.format(new Date()) + "\n"
+                + "Cliente " + nombre + " " + apellido + "\n"
+                + "Detalles de Orden\n"
+                + od + "/n"
+                + "GRACIAS POR SU PREFERENCIA";
+        return Factura;
     }
 }
