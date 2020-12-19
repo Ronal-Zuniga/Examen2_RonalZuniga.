@@ -1,4 +1,8 @@
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,6 +48,12 @@ public class Principal extends javax.swing.JFrame {
         idc = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         historial = new javax.swing.JDialog();
+        jPanel4 = new javax.swing.JPanel();
+        jButton6 = new javax.swing.JButton();
+        cbc1 = new javax.swing.JComboBox<>();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        hist = new javax.swing.JTextArea();
+        jLabel10 = new javax.swing.JLabel();
         fact = new javax.swing.JDialog();
         jPanel2 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -179,15 +189,77 @@ public class Principal extends javax.swing.JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        jPanel4.setBackground(new java.awt.Color(255, 153, 102));
+
+        jButton6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jButton6.setText("Cargar Clientes");
+        jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton6MouseClicked(evt);
+            }
+        });
+
+        cbc1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        cbc1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbc1ItemStateChanged(evt);
+            }
+        });
+
+        jScrollPane3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        hist.setColumns(20);
+        hist.setRows(5);
+        jScrollPane3.setViewportView(hist);
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("Historial");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap(60, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(82, 82, 82)
+                                .addComponent(jButton6))
+                            .addComponent(cbc1, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(158, 158, 158))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(54, 54, 54))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(276, 276, 276))))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jButton6)
+                .addGap(18, 18, 18)
+                .addComponent(cbc1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27))
+        );
+
         javax.swing.GroupLayout historialLayout = new javax.swing.GroupLayout(historial.getContentPane());
         historial.getContentPane().setLayout(historialLayout);
         historialLayout.setHorizontalGroup(
             historialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         historialLayout.setVerticalGroup(
             historialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 153, 102));
@@ -701,7 +773,7 @@ public class Principal extends javax.swing.JFrame {
                 od = o;
                 ac.cargarArchivo();
                 for (int i = 0; i < ac.getClientes().size(); i++) {
-                    if (ac.getClientes().get(i).equals(c)) {
+                    if (ac.getClientes().get(i).equals(cl)) {
                         ac.getClientes().get(i).getOrdenes().add(o);
                         i = ac.getClientes().size();
                     }
@@ -737,12 +809,46 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4MouseClicked
 
     private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
-        tafac.setText(factura(od,nc1.getText(),apc1.getText()));
+        tafac.setText(factura(od, nc1.getText(), apc1.getText()));
+        String location = "./Factura_"+nc1.getText()+".txt";
+        File f = new File(location);
+        crearArchivo(f, factura(od, nc1.getText(), apc1.getText()));
         fact.setModal(true);
         fact.pack();
         fact.setLocationRelativeTo(this);
         fact.setVisible(true);
     }//GEN-LAST:event_jButton5MouseClicked
+
+    private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
+        try {
+            adminCliente ac = new adminCliente("./Clientes.rjz");
+            ac.cargarArchivo();
+            DefaultComboBoxModel m = new DefaultComboBoxModel();
+            for (int i = 0; i < ac.getClientes().size(); i++) {
+                m.addElement(ac.getClientes().get(i));
+            }
+            cbc1.setModel(m);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton6MouseClicked
+
+    private void cbc1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbc1ItemStateChanged
+        hist.setText("");
+        Cliente c = (Cliente) cbc1.getSelectedItem();
+        String historial = "";
+        for (int i = 0; i < c.getOrdenes().size(); i++) {
+            historial += "Orden Num " + c.getOrdenes().get(i).getNum_orden() + "\n";
+            for (int j = 0; j < c.getOrdenes().get(i).getPiezas().size(); j++) {
+                historial += c.getOrdenes().get(i).getPiezas().get(j).getPieza() + "\n";
+            }
+            for (int k = 0; k < c.getOrdenes().get(i).getComplementos().size(); k++) {
+                historial += c.getOrdenes().get(i).getComplementos().get(k).getTipo() + "\n";
+            }
+            historial += "\n";
+        }
+        hist.setText(historial);
+    }//GEN-LAST:event_cbc1ItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -785,7 +891,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTextField apc1;
     private javax.swing.JProgressBar barra;
     private javax.swing.JComboBox<String> cbc;
+    private javax.swing.JComboBox<String> cbc1;
     private javax.swing.JDialog fact;
+    private javax.swing.JTextArea hist;
     private javax.swing.JDialog historial;
     private javax.swing.JTextField idc;
     private javax.swing.JTextField idc1;
@@ -794,7 +902,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -810,8 +920,10 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lba;
     private javax.swing.JLabel lbb;
     private javax.swing.JLabel lbm;
@@ -880,5 +992,25 @@ public class Principal extends javax.swing.JFrame {
                 + od + "/n"
                 + "GRACIAS POR SU PREFERENCIA";
         return Factura;
+    }
+
+    public static void crearArchivo(File archivo, String texto) {
+        FileWriter flwriter = null;
+        try {
+            flwriter = new FileWriter(archivo);
+            BufferedWriter bfwriter = new BufferedWriter(flwriter);
+            bfwriter.write(texto);
+            bfwriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (flwriter != null) {
+                try {
+                    flwriter.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
